@@ -1,88 +1,109 @@
 
 let yoff = 0.0;
-let xinit = 0;
 let cloudx = 100;
 let cloudy = 100;
 let xBoat = 0;
 let xBoat2 = 0;
-let drop = [];
+let drops = [];
+let dropsNumber = 1500;
+let cloudSize = 0;
+let darkness = 0;
+let clouds = 2;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
   for(var i = 0; i < 1500; i++) {
-    drop[i] = new Drop();
-}
-  xOff = 50
+    drops[i] = new Drop();
+  }
+  
+  cloudSize = random(1,4);
+  darkness = random (-100, 100);
+  clouds = random([2,3,4,5,6,7,8,9]);
   xBoat2 = width + 400;
-  //noLoop();
 }
 
 function draw() {
   
-  let sky = color(103, 196, 240);
+  let sky = color(103 + darkness, 196 + darkness, 240 + darkness);
   background(sky); 
   for(var i = 0; i < 1500; i++) {
-    drop[i].show();
-    drop[i].update();
+    drops[i].show();
+    drops[i].update();
   }
 
-  strokeWeight(0);
   makeCloud(cloudx, cloudy);
-  makeCloud(cloudx + 100, cloudy+100);  
-  cloudx += 0.5;
+  makeCloud(cloudx + 100, cloudy + 100);  
+  cloudx += 1;
 
-  strokeWeight(15);
   push();
-translate(0, 200);
-//xinit +=1;
-
-if(xinit == width){
-  xinit = 0;
-}
+  translate(0, 200);
   strokeWeight(5);
   stroke(0)
   fill(100, 50, 20);
-//triangle(0, 400, 300, 200, 600, 400);
-triangle(300, 400, 570, 250, 900, 400);
-push()
-translate(450, 330); 
+  
+  push()
+  translate(450, 330); 
   branch(40);
-pop()
-drawMountain();
-fill(0);
+  pop()
 
-push();
-translate(0,1400);
-drawMountain();
-pop();
+  push();
+  translate(600, 300); 
+  branch(30);
+  pop();
 
-point(250,300);
-push()
-translate(250, 300); 
+  push();
+  translate(900, 300); 
+  branch(70);
+  pop();
+  
+  drawMountain(0);
+  triangle(300, 400, 570, 250, 900, 400);
+ 
+
+  push();
+  translate(700,10);
+  drawMountain(0);
+  pop();
+
+
+  push();
+  translate(250, 300); 
   branch(50);
-pop()
+  pop();
 
-ocean();
-drawBoat(xBoat,270);
-xBoat+=3;
-if (xBoat > width) {
-  xBoat = -200;
-}
-translate(0,100);
-ocean();
-translate(0,100);
-ocean();
+  push();
+  translate(450, 300); 
+  branch(50);
+  pop();
 
-drawBoat(xBoat2 ,265);
-xBoat2-=4;
-if (xBoat2 < -400) {
-  xBoat2 = width + 400;
-}
-translate(0,100);
-ocean();
-pop();
+  push();
+  translate(100, 300); 
+  branch(100);
+  pop();
 
+  wave();
+  drawBoat(xBoat,270);
+  xBoat+=3;
+  if (xBoat > width) {
+    xBoat = -200;
+  }
 
+  translate(0,100);
+  wave();
+  translate(0,100);
+  wave();
+
+  drawBoat2(xBoat2 ,265);
+  xBoat2-=4;
+  if (xBoat2 < -400) {
+    xBoat2 = width + 400;
+  }
+
+  translate(0,100);
+  wave();
+  pop();
+  
 }
 
 
@@ -142,10 +163,9 @@ function branch(len) {
 
 }
 
-function drawMountain() {
+function drawMountain(multiple) {
   fill(100, 50, 20);
   beginShape();
-
   curveVertex(600,400)  
   curveVertex(600,400)
 
@@ -153,7 +173,10 @@ function drawMountain() {
   
   curveVertex(300,200)
   curveVertex(200,200)
-  //curveVertex(100,200)
+  if (multiple == 1) {
+    curveVertex(100,200);
+  }
+ 
 
   curveVertex(0,400)
   curveVertex(0,400)
@@ -162,7 +185,7 @@ function drawMountain() {
   endShape();
 }
 
-function ocean() {
+function wave() {
   //waves
   fill(67, 157, 171);
   noStroke();
@@ -185,9 +208,8 @@ function ocean() {
 }
 
 function makeCloud(cloudx, cloudy) {
- // this.speed = 500;
   fill(250);
-  ellipse(cloudx, cloudy, 70, 50);
+  ellipse(cloudx, cloudy, 70 * cloudSize, 50);
   ellipse(cloudx - 10, cloudy + 10, 70, 50);  
   ellipse(cloudx - 20, cloudy + 10, 70, 50);
 }
@@ -220,7 +242,6 @@ function Drop() {
 }
 
 function drawBoat(x, y) {
-
   fill('brown')
   beginShape()
   vertex(145 + x, y + 190)
@@ -249,6 +270,46 @@ function drawBoat(x, y) {
   vertex(210 + x, y + 185)
   vertex(240 + x, y + 185)
   vertex(210 + x, y + 123)
+  endShape()
+  if (x > width) {
+    x = 0
+  } else {
+    x = x + 1
+  }
+}
+
+function drawBoat2(x, y) {
+  let plusX = 150;
+  let plusY = 10;
+  point(155 + x, y + 210)
+  fill('red')
+  beginShape()
+  vertex(155 + x, y  + plusY + 210)
+  vertex(260 + plusX + x, y + plusY + 210)
+  vertex(270 + plusX + x, y  + 190)
+  vertex(145 + x , y + 190)
+  endShape()
+
+  //sail1
+  fill('green')
+  stroke('green')
+  beginShape()
+  vertex(206 + x, y + 190)
+  vertex(206 + x, y + 115 - 50)
+  vertex(167 + x, y + 185)
+  vertex(206 + x, y + 185)
+  endShape()
+  fill('white')
+  stroke('white')
+
+
+  //sail2
+  
+  beginShape()
+  vertex(210 + x, y + 123- 50)
+  vertex(210 + x, y + 185)
+  vertex(240 + x + 20, y + 185  )
+  //vertex(210 + x, y + 123)
   endShape()
   if (x > width) {
     x = 0
