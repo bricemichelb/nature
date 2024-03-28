@@ -20,7 +20,7 @@ function setup() {
   cloudSize = random(1,4);
   darkness = random (-100, 100);
   clouds = random([2,3,4,5,6,7,8,9]);
-  xBoat2 = width + 400;
+  xBoat2 = width + 10;
 }
 
 function draw() {
@@ -60,7 +60,6 @@ function draw() {
   drawMountain(0);
   triangle(300, 400, 570, 250, 900, 400);
  
-
   push();
   translate(700,10);
   drawMountain(0);
@@ -115,12 +114,6 @@ function branch(len) {
     stroke(70,40,20);
     line(0, 0, 0, -len);
     translate(0, -len);
-    /*
-    rotate(random(-20, -30));
-    branch(len * random(0.7, 0.9));    
-    rotate(random(50, 50));
-    branch(len * random(0.7, 0.9));
-    */
     
     rotate(-30);
     branch(len * 0.8);    
@@ -139,25 +132,6 @@ function branch(len) {
     fill(r, g, b);
     noStroke();
     ellipse(0,0, 10);
-   /* 
-    beginShape();
-    for(let i = 45; i < 135; i++) {
-      let rad = 15;
-      let x = rad * cos(i);
-      let y = rad * sin(i);
-      vertex(x, y);
-    }
-
-    for(let i = 135; i > 40; i--) {
-      let rad = 15;
-      let x = rad * cos(i);
-      let y = rad * sin(i) + 20 ;
-      vertex(x, y);
-    }
-
-   
-   
-    endShape(); */
   }
   pop(); 
 
@@ -303,13 +277,12 @@ function drawBoat2(x, y) {
   stroke('white')
 
 
-  //sail2
-  
+  //sail2  
   beginShape()
   vertex(210 + x, y + 123- 50)
   vertex(210 + x, y + 185)
   vertex(240 + x + 20, y + 185  )
-  //vertex(210 + x, y + 123)
+  vertex(210 + x, y + 123)
   endShape()
   if (x > width) {
     x = 0
